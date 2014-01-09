@@ -1,11 +1,11 @@
+This is a naive implementation of term frequency–inverse document frequency recommendation engine.  Runs against all the bills introduced in Congress in the 2011-2012 term.
+
 Synopsis
 --------
 
 ```
 $ cat search-text.txt | ruby ./main.rb
 ```
-
-This is a naive implementation of term frequency–inverse document frequency recommendation engine.  Runs against all the bills introduced in Congress in the 2011-2012 term.
 
 Setup
 -----
