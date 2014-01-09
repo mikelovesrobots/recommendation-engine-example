@@ -1,3 +1,5 @@
+#!/usr/bin/ruby
+#
 require 'json'
 
 class ArticleRepository
@@ -125,8 +127,8 @@ class Reporter
     end
 
     puts "Results: "
-    @results.each_with_index do |result, index|
-      puts "  #{index}. #{result}\n\n"
+    @results.each do |result|
+      puts "  #{result}\n\n"
     end
   end
 end
@@ -134,19 +136,34 @@ end
 class RecommendationBuilder
   RESULTS_TO_TAKE_FROM_EACH_SEARCH = 2
   SEARCHES_TO_PERFORM = 3
-  IDEAL_RECOMMENDATIONS_COUNT = 5
 
   def initialize(word_searcher)
     @word_searcher = word_searcher
   end
 
   def recommend(least_common_words)
-    search_results = (0..SEARCHES_TO_PERFORM).collect do |i|
+    search_results = (0...SEARCHES_TO_PERFORM).collect do |i|
       search_term = least_common_words[i]
+      index = 0
       @word_searcher.search(least_common_words[i], RESULTS_TO_TAKE_FROM_EACH_SEARCH).collect do |result|
-        "[#{search_term}] #{result}"
+        index += 1
+        SearchResult.new(index, search_term, result)
       end
-    end.flatten.compact[0...IDEAL_RECOMMENDATIONS_COUNT]
+    end.flatten
+  end
+end
+
+class SearchResult
+  attr_accessor :result_index, :search_term, :result
+
+  def initialize(result_index, search_term, result)
+    @result_index = result_index
+    @search_term = search_term
+    @result = result
+  end
+
+  def to_s
+    "#{result_index}. [#{search_term}] #{result}"
   end
 end
 
